@@ -1,7 +1,7 @@
 //
 //  ViewController.swift
 //  Easy Browser, Project 4
-//  Day 24
+//  Day 25
 //  Created by Igor Polousov on 28.06.2021.
 //
 
@@ -93,6 +93,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        
         let url = navigationAction.request.url
         
         if let host = url?.host {
