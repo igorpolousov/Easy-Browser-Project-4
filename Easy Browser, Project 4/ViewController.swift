@@ -15,8 +15,8 @@ class ViewController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
     // Создали свойство класса progressView
     var progressView: UIProgressView!
-    // Создали массив с сайтами
-    var websites = ["hackingwithswift.com", "apple.com", "mywool.shop"]
+    
+    var selectedWebsite: String?
     
     
     // Запустили метод loadView в котором указано как будет выглядеть view
@@ -30,15 +30,24 @@ class ViewController: UIViewController, WKNavigationDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Unwrap selctedWebsite
+        
+        if let websiteToLoad = selectedWebsite {
+            let url = URL(string: "HTTPS://" + websiteToLoad)!
+            webView.load(URLRequest(url: url))
+        }
+        
         // создали переменную с указанием URL адреса в виде строки
-        let url = URL(string: "HTTPS://" + websites[0])!
-        webView.load(URLRequest(url: url)) // передали значение переменной в webView
+        // let url = URL(string: "HTTPS://" + websites1[0])!
+        // webView.load(URLRequest(url: url)) // передали значение переменной в webView
+        
+        
         // Строка ниже позволяет сделать доступными жесты "назад" и "вперед" как в браузере
         webView.allowsBackForwardNavigationGestures = true
         // Добавили наблюдателя к webView чтобы получать инфо о прогрессе загрузки(estimatedProgress)
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
         // Кнопка в navigation bar с функцией openTapped
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openTapped))
+        //  navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openTapped))
         // Создали progress view
         progressView = UIProgressView(progressViewStyle: .default)
         progressView.sizeToFit()
@@ -59,22 +68,22 @@ class ViewController: UIViewController, WKNavigationDelegate {
         
         }
 
-    @objc func openTapped() {
-        // alert controller
-        let ac = UIAlertController(title: "Open page ...", message: nil, preferredStyle: .actionSheet)
-        // actions for alert controller, choose to load apple or hackingwithswift or cancel with function openPage
-        for website in websites {
-            ac.addAction(UIAlertAction(title: website, style: .default, handler: openPage))
-        }
+//    @objc func openTapped() {
+//        // alert controller
+//        let ac = UIAlertController(title: "Open page ...", message: nil, preferredStyle: .actionSheet)
+//        // actions for alert controller, choose to load apple or hackingwithswift or cancel with function openPage
+//        for website in websites {
+//            ac.addAction(UIAlertAction(title: website, style: .default, handler: openPage))
+//        }
 //        ac.addAction(UIAlertAction(title: "apple.com", style: .default, handler: openPage))
 //        ac.addAction(UIAlertAction(title: "hackingwithswift.com", style: .default, handler: openPage))
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-        // popOverController for iPad
-        ac.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
-        // show alert controller
-        present(ac, animated: true)
-    }
-    
+//        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+//        // popOverController for iPad
+//        ac.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+//        // show alert controller
+//        present(ac, animated: true)
+//    }
+//
     func openPage(action: UIAlertAction) {
         // Проверили что выбрана одна из опций
         guard let actionTitle = action.title else { return }
@@ -101,13 +110,12 @@ class ViewController: UIViewController, WKNavigationDelegate {
         let url = navigationAction.request.url
         
         if let host = url?.host {
-            for website in websites {
-                if host.contains(website) {
+//            for website in websites {
+                if host.contains(selectedWebsite!) {
                     decisionHandler(.allow)
                     return
                 }
             }
-        }
         decisionHandler(.cancel)
         
         // Alert controller informs user not to visit websites that is not in list
