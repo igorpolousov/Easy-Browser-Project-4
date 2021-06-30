@@ -48,8 +48,12 @@ class ViewController: UIViewController, WKNavigationDelegate {
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         // Добавляет кнопку refresh, которая будет перезагружать webView
         let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.reload))
+        // Добавляет кнопку forward
+        let forward = UIBarButtonItem(barButtonSystemItem: .fastForward, target: webView, action: #selector(webView.goForward))
+        // Добавляет кнопку back
+        let back = UIBarButtonItem(barButtonSystemItem: .rewind, target: webView, action: #selector(webView.goBack))
         // Добавляем обе кнопки в массив, этот массив идет по умолчанию в классе
-        toolbarItems = [progressButton, spacer, refresh]
+        toolbarItems = [progressButton, spacer, back, forward, refresh]
         navigationController?.isToolbarHidden = false
         
         
@@ -104,11 +108,14 @@ class ViewController: UIViewController, WKNavigationDelegate {
                 }
             }
         }
+        decisionHandler(.cancel)
+        
         // Alert controller informs user not to visit websites that is not in list
         let ac = UIAlertController(title: "Warning!!!", message: "It is not allowed to visit websites that is Not in List!!", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Ok", style: .cancel))
         present(ac, animated: true)
-        decisionHandler(.cancel)
+        
+        
     }
 
 }
