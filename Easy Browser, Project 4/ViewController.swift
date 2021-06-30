@@ -16,7 +16,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
     // Создали свойство класса progressView
     var progressView: UIProgressView!
     // Создали массив с сайтами
-    var websites = ["hackingwithswift.com", "apple.com"]
+    var websites = ["hackingwithswift.com", "apple.com", "mywool.shop"]
     
     
     // Запустили метод loadView в котором указано как будет выглядеть view
@@ -104,6 +104,10 @@ class ViewController: UIViewController, WKNavigationDelegate {
                 }
             }
         }
+        // Alert controller informs user not to visit websites that is not in list
+        let ac = UIAlertController(title: "Warning!!!", message: "It is not allowed to visit websites that is Not in List!!", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "Ok", style: .cancel))
+        present(ac, animated: true)
         decisionHandler(.cancel)
     }
 
